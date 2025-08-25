@@ -1,0 +1,31 @@
+{
+  "cursortab": {
+    "version": "free",
+    "enabled": true,
+    "plan": "free",
+    "features": {
+      "autocomplete": true,
+      "suggestions": true,
+      "basicChat": true,
+      "codeAnalysis": true
+    },
+    "limits": {
+      "daily": 100,
+      "monthly": 1000,
+      "contextLength": 2000
+    },
+    "model": "basic",
+    "customModel": false
+  },
+  "ai": {
+    "provider": "cursortab",
+    "plan": "free",
+    "autoComplete": true,
+    "chat": true
+  },
+  "editor": {
+    "autoComplete": true,
+    "suggestions": true,
+    "aiFeatures": "free"
+  }
+}
