@@ -7,7 +7,9 @@
       "autocomplete": true,
       "suggestions": true,
       "basicChat": true,
-      "codeAnalysis": true
+      "codeAnalysis": true,
+      "chat": true,
+      "completion": true
     },
     "limits": {
       "daily": 100,
@@ -15,17 +17,26 @@
       "contextLength": 2000
     },
     "model": "basic",
-    "customModel": false
+    "customModel": false,
+    "apiKey": null
   },
   "ai": {
     "provider": "cursortab",
     "plan": "free",
     "autoComplete": true,
-    "chat": true
+    "chat": true,
+    "enabled": true
   },
   "editor": {
     "autoComplete": true,
     "suggestions": true,
-    "aiFeatures": "free"
+    "aiFeatures": "free",
+    "cursortab": {
+      "enabled": true
+    }
+  },
+  "chat": {
+    "enabled": true,
+    "provider": "cursortab"
   }
 }

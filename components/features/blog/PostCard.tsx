@@ -1,20 +1,20 @@
-"use client";
+import Image from "next/image";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 import { Calendar, User } from "lucide-react";
-import Image from "next/image";
 import { Post } from "@/types/blog";
 import { formatDate } from "@/lib/date";
 
 interface PostCardProps {
   post: Post;
+  isFirst?: boolean;
 }
 
-export function PostCard({ post }: PostCardProps) {
+export function PostCard({ post, isFirst }: PostCardProps) {
   return (
-    <Card className="group bg-card/50 border-border/40 hover:border-primary/20 overflow-hidden border backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-lg">
+    <Card className="group bg-card/50 hover:border-primary/20 overflow-hidden border backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-lg">
       {post.coverImage && (
         <div className="relative aspect-[2/1] overflow-hidden">
           <div className="from-background/20 absolute inset-0 z-10 bg-gradient-to-t to-transparent" />
@@ -23,7 +23,7 @@ export function PostCard({ post }: PostCardProps) {
             alt={post.title}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            priority={false}
+            priority={isFirst}
             className="object-cover transition-transform duration-300 group-hover:scale-105"
           />
         </div>

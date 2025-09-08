@@ -2,6 +2,7 @@ import { Client } from "@notionhq/client";
 import type { Post, TagFilterItem } from "@/types/blog";
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { NotionToMarkdown } from "notion-to-md";
+import { unstable_cache } from "next/cache";
 
 export const notion = new Client({
   auth: process.env.NOTION_TOKEN,
@@ -86,44 +87,76 @@ export const getPostBySlug = async (
   // return getPageMetadata(response);
 };
 
-export const getPublishedPosts = async (tag?: string): Promise<Post[]> => {
-  const response = await notion.databases.query({
-    database_id: process.env.NOTION_DATABASE_ID!,
-    filter: {
-      and: [
-        {
-          property: "Status",
-          select: {
-            equals: "Published",
-          },
-        },
-        ...(tag && tag !== "전체"
-          ? [
-              {
-                property: "Tags",
-                multi_select: {
-                  contains: tag,
-                },
-              },
-            ]
-          : []),
-      ],
-    },
-    sorts: [
-      {
-        property: "Date",
-        direction: "descending",
-      },
-    ],
-  });
+export interface GetPublishedPostsParams {
+  tag?: string;
+  sort?: string;
+  pageSize?: number;
+  startCursor?: string;
+}
 
-  return response.results
-    .filter((page): page is PageObjectResponse => "properties" in page)
-    .map(getPostMetadata);
-};
+export interface GetPublishedPostsResponse {
+  posts: Post[];
+  hasMore: boolean;
+  nextCursor: string | null;
+}
+
+export const getPublishedPosts = unstable_cache(
+  async ({
+    tag = "전체",
+    sort = "latest",
+    pageSize = 2,
+    startCursor,
+  }: GetPublishedPostsParams): Promise<GetPublishedPostsResponse> => {
+    const response = await notion.databases.query({
+      database_id: process.env.NOTION_DATABASE_ID!,
+      filter: {
+        and: [
+          {
+            property: "Status",
+            select: {
+              equals: "Published",
+            },
+          },
+          ...(tag && tag !== "전체"
+            ? [
+                {
+                  property: "Tags",
+                  multi_select: {
+                    contains: tag,
+                  },
+                },
+              ]
+            : []),
+        ],
+      },
+      sorts: [
+        {
+          property: "Date",
+          direction: sort === "latest" ? "descending" : "ascending",
+        },
+      ],
+      page_size: pageSize,
+      start_cursor: startCursor,
+    });
+
+    const posts = response.results
+      .filter((page): page is PageObjectResponse => "properties" in page)
+      .map(getPostMetadata);
+
+    return {
+      posts,
+      hasMore: response.has_more,
+      nextCursor: response.next_cursor,
+    };
+  },
+  ["posts"],
+  {
+    tags: ["posts"],
+  }
+);
 
 export const getTags = async (): Promise<TagFilterItem[]> => {
-  const posts = await getPublishedPosts();
+  const { posts } = await getPublishedPosts({ pageSize: 100 });
 
   // 모든 태그를 추출하고 각 태그의 출현 횟수를 계산
   const tagCount = posts.reduce(
@@ -155,4 +188,55 @@ export const getTags = async (): Promise<TagFilterItem[]> => {
   const sortedTags = restTags.sort((a, b) => a.name.localeCompare(b.name));
 
   return [allTag, ...sortedTags];
+};
+
+// ...생략...
+
+export interface CreatePostParams {
+  title: string;
+  tag: string;
+  content: string;
+}
+
+export const createPost = async ({ title, tag, content }: CreatePostParams) => {
+  const response = await notion.pages.create({
+    parent: {
+      database_id: process.env.NOTION_DATABASE_ID!,
+    },
+    properties: {
+      Title: {
+        title: [
+          {
+            text: {
+              content: title,
+            },
+          },
+        ],
+      },
+      Description: {
+        rich_text: [
+          {
+            text: {
+              content: content,
+            },
+          },
+        ],
+      },
+      Tags: {
+        multi_select: [{ name: tag }],
+      },
+      Status: {
+        select: {
+          name: "Published",
+        },
+      },
+      Date: {
+        date: {
+          start: new Date().toISOString(),
+        },
+      },
+    },
+  });
+
+  return response;
 };
