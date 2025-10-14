@@ -6,7 +6,6 @@ import TagSectionClient from "@/app/_components/TagSection.client";
 import TagSectionSkeleton from "@/app/_components/TagSectionSkeleton";
 import PostListSuspense from "@/components/features/blog/PostListSuspense";
 import PostListSkeleton from "@/components/features/blog/PostListSkeleton";
-// import PostListClient from "@/components/features/blog/PostList.client";
 
 import { getPublishedPosts, getTags } from "@/lib/notion";
 

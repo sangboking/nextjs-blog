@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
 import SOCIAL_LINKS_ARR from "@/constants/socialLinks";
+import Image from "next/image";
 
 const ProfileSection = () => {
   return (
@@ -10,16 +11,14 @@ const ProfileSection = () => {
         <CardContent>
           <div className="space-y-4">
             <div className="flex justify-center">
-              <div className="bg-muted rounded-full p-2">
-                <div className="h-36 w-36 overflow-hidden rounded-full">
-                  {/* <Image
-                  src="/images/profile-light.png"
-                  alt="짐코딩"
+              <div className="h-36 w-36 overflow-hidden rounded-full">
+                <Image
+                  src="/images/profile.jpeg"
+                  alt="상코딩"
                   width={144}
                   height={144}
-                  className="object-cover"
-                /> */}
-                </div>
+                  className="h-full w-full object-cover"
+                />
               </div>
             </div>
 

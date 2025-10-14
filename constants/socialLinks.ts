@@ -1,17 +1,13 @@
-import { Youtube, Github, Instagram } from "lucide-react";
+import { Github, Instagram } from "lucide-react";
 
 const SOCIAL_LINKS_ARR = [
   {
-    icon: Youtube,
-    href: "https://www.youtube.com/gymcoding",
-  },
-  {
     icon: Github,
-    href: "https://github.com/gymcoding",
+    href: "https://github.com/sangboking",
   },
   {
     icon: Instagram,
-    href: "https://www.instagram.com/gymcoding",
+    href: "https://www.instagram.com/ssanghoons",
   },
 ];
 
