@@ -18,12 +18,14 @@ const ProfileSection = () => {
                   width={144}
                   height={144}
                   className="h-full w-full object-cover"
+                  quality={100}
+                  priority
                 />
               </div>
             </div>
 
             <div className="text-center">
-              <h3 className="text-lg font-bold">상코딩</h3>
+              <h3 className="text-lg font-bold">박상훈</h3>
               <p className="text-primary text-sm">FE Developer</p>
             </div>
 

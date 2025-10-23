@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import Link from "next/link";
-import { Code2, User, Briefcase, Newspaper, Coffee, Github } from "lucide-react";
+import { Code2, User, Briefcase, Github } from "lucide-react";
 
 interface AboutLayoutProps {
   children: ReactNode;
@@ -10,9 +10,7 @@ const menuItems = [
   { icon: User, label: "프로필", href: "/about" },
   { icon: Code2, label: "기술 스택", href: "/about/skills" },
   { icon: Briefcase, label: "프로젝트", href: "/about/projects" },
-  { icon: Newspaper, label: "블로그", href: "/about/blog" },
-  { icon: Coffee, label: "컨택", href: "/about/contact" },
-  { icon: Github, label: "Github", href: "https://github.com", external: true },
+  { icon: Github, label: "Github", href: "https://github.com/sangboking", external: true },
 ];
 
 export default function AboutLayout({ children }: AboutLayoutProps) {
