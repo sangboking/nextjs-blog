@@ -90,8 +90,6 @@ export const getPostBySlug = async (
     markdown: parent,
     post: getPostMetadata(response.results[0] as PageObjectResponse),
   };
-
-  // return getPageMetadata(response);
 };
 
 export interface GetPublishedPostsParams {

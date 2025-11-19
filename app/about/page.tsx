@@ -1,11 +1,11 @@
 import Image from "next/image";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar, GraduationCap, User } from "lucide-react";
+import { Calendar, GraduationCap, User, Briefcase, Building2 } from "lucide-react";
 
 const About = () => {
   return (
-    <div className="container">
+    <div>
       <div className="space-y-8">
         {/* 프로필 섹션 */}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
@@ -31,7 +31,7 @@ const About = () => {
           </Card>
 
           {/* 개인 정보 카드 */}
-          <Card className="pt-6 md:col-span-2">
+          <Card className="pt-6 pb-6 md:col-span-2">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <User className="h-5 w-5" />
@@ -71,22 +71,27 @@ const About = () => {
         {/* 소개 섹션 */}
         <Card className="py-5">
           <CardContent>
-            <div className="prose prose-neutral dark:prose-invert max-w-none">
-              <h3 className="text-primary mb-1 text-xl font-semibold">
-                [급변하는 프론트엔드 생태계]
-              </h3>
-              <p className="text-lg leading-relaxed">
-                빠르게 변화하며, 새로운 기술이 나오는 프론트엔드 생태계에서
-                <br /> 새로운 기술에 두려워 하지 않고 탐구하는 것을 좋아합니다.
-              </p>
-            </div>
+            {/* 회사 이력 섹션 */}
+            <div className="flex flex-col gap-6 md:flex-row md:items-start">
+              {/* 입사 일자 */}
+              <div className="bg-primary/10 flex shrink-0 items-center gap-2 rounded-lg p-3 md:w-36">
+                <Briefcase className="text-primary h-5 w-5" />
+                <div className="flex items-center gap-1">
+                  <span className="text-sm font-semibold">2022 ~ 현재</span>
+                </div>
+              </div>
 
-            <div className="prose prose-neutral dark:prose-invert mt-4 max-w-none">
-              <h3 className="text-primary mb-1 text-xl font-semibold">[추구하는 방향]</h3>
-              <p className="text-lg leading-relaxed">
-                동료와의 소통을 중요시 여기고, 직관적이고 알아보기 쉬운 코드를 지향하며, <br />
-                클린코드에 대한 관심이 많습니다.
-              </p>
+              {/* 회사 정보 */}
+              <div className="border-primary/20 flex flex-1 flex-col gap-2 border-l-2 pl-4 md:pl-6">
+                <div className="flex items-center gap-2">
+                  <Building2 className="text-primary h-5 w-5" />
+                  <h4 className="text-xl font-bold">(주)링커</h4>
+                </div>
+                <p className="text-muted-foreground text-sm">소프트웨어 개발 스타트업</p>
+                <div className="bg-primary/5 inline-flex w-fit items-center gap-2 rounded-md px-3 py-1.5">
+                  <span className="text-primary text-sm font-semibold">Frontend-Engineer</span>
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
