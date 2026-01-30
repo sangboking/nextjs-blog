@@ -77,7 +77,7 @@ const About = () => {
               <div className="bg-primary/10 flex shrink-0 items-center gap-2 rounded-lg p-3 md:w-36">
                 <Briefcase className="text-primary h-5 w-5" />
                 <div className="flex items-center gap-1">
-                  <span className="text-sm font-semibold">2022 ~ 현재</span>
+                  <span className="text-sm font-semibold">2022.02 ~ 2026.01</span>
                 </div>
               </div>
 

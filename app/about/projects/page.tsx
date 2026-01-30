@@ -135,9 +135,26 @@ export default function AboutProjects() {
                 {/* 프로젝트 상세 내용 */}
                 <div className="space-y-2">
                   <h4 className="text-left text-lg font-semibold">상세내용</h4>
-                  <p className="text-muted-foreground text-left leading-relaxed whitespace-pre-line">
-                    {selectedProject.details}
-                  </p>
+                  <div className="space-y-4">
+                    {selectedProject.details.map((detailSection, sectionIndex) => (
+                      <div
+                        key={`${selectedProject.id}-detail-${sectionIndex}`}
+                        className="space-y-2"
+                      >
+                        {/* 대제목 */}
+                        <h5 className="text-left font-semibold">{detailSection.title}</h5>
+
+                        {/* 하위 항목(불릿) */}
+                        <ul className="text-muted-foreground list-disc space-y-1 pl-5 text-left leading-relaxed">
+                          {detailSection.items.map((item, itemIndex) => (
+                            <li key={`${selectedProject.id}-detail-${sectionIndex}-${itemIndex}`}>
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </DialogHeader>
