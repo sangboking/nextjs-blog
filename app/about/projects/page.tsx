@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Calendar } from "lucide-react";
+import { Calendar, ExternalLink } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -123,10 +123,27 @@ export default function AboutProjects() {
                   ))}
                 </div>
 
-                {/* 개발 기간 */}
-                <div className="flex items-center justify-start gap-2">
-                  <Calendar className="text-muted-foreground h-4 w-4" />
-                  <span className="text-muted-foreground text-sm">{selectedProject.period}</span>
+                <div className="space-y-2">
+                  {/* 개발 기간 */}
+                  <div className="flex items-center justify-start gap-2">
+                    <Calendar className="text-muted-foreground h-4 w-4" />
+                    <span className="text-muted-foreground text-sm">{selectedProject.period}</span>
+                  </div>
+
+                  {/* 프로젝트 링크 (있는 경우에만 노출) */}
+                  {selectedProject.url && (
+                    <div className="flex items-center justify-start gap-2">
+                      <ExternalLink className="text-muted-foreground h-4 w-4" />
+                      <a
+                        href={selectedProject.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-sm text-indigo-600 underline-offset-4 hover:underline dark:text-indigo-400"
+                      >
+                        {selectedProject.url}
+                      </a>
+                    </div>
+                  )}
                 </div>
 
                 {/* 구분선 */}

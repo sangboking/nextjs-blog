@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { CalendarDays, User } from "lucide-react";
-import { getPostBySlug, getPublishedPosts } from "@/lib/notion";
+import { getAdjacentPosts, getPostBySlug, getPublishedPosts } from "@/lib/notion";
 import { formatDate } from "@/lib/date";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
@@ -95,6 +95,7 @@ interface BlogPostProps {
 export default async function BlogPost({ params }: BlogPostProps) {
   const { slug } = await params;
   const { markdown, post } = await getPostBySlug(slug);
+  const { previousPost, nextPost } = await getAdjacentPosts(slug);
 
   if (!post) {
     notFound();
@@ -170,6 +171,43 @@ export default async function BlogPost({ params }: BlogPostProps) {
           <Separator className="my-16" />
 
           {/* 이전/다음 포스트 네비게이션 */}
+          <nav className="grid gap-4 sm:grid-cols-2">
+            {/* 이전 글(더 과거) */}
+            {previousPost ? (
+              <Link
+                href={`/blog/${previousPost.slug}`}
+                className="group border-border bg-muted/40 hover:bg-muted/60 rounded-lg border p-4 transition-colors"
+              >
+                <p className="text-muted-foreground text-sm">이전 글</p>
+                <p className="group-hover:text-foreground mt-1 line-clamp-2 font-semibold transition-colors">
+                  {previousPost.title}
+                </p>
+                <p className="text-muted-foreground mt-2 text-xs">
+                  {formatDate(previousPost.date)}
+                </p>
+              </Link>
+            ) : (
+              <div className="hidden sm:block" />
+            )}
+
+            {/* 다음 글(더 최신) */}
+            {nextPost ? (
+              <Link
+                href={`/blog/${nextPost.slug}`}
+                className="group border-border bg-muted/40 hover:bg-muted/60 rounded-lg border p-4 text-right transition-colors"
+              >
+                <p className="text-muted-foreground text-sm">다음 글</p>
+                <p className="group-hover:text-foreground mt-1 line-clamp-2 font-semibold transition-colors">
+                  {nextPost.title}
+                </p>
+                <p className="text-muted-foreground mt-2 text-xs">{formatDate(nextPost.date)}</p>
+              </Link>
+            ) : (
+              <div className="hidden sm:block" />
+            )}
+          </nav>
+
+          <Separator className="my-12" />
           <GiscusComments />
         </section>
         <aside className="relative hidden md:block">

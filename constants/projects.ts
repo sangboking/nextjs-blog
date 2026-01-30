@@ -16,6 +16,7 @@ interface Project {
   iconColor: string; // 아이콘 색상 (Tailwind CSS 클래스)
   backgroundColor: string; // 아이콘 배경 색상 (Tailwind CSS 클래스)
   period: string; // 개발 기간
+  url?: string; // 프로젝트 링크 (선택)
   details: ProjectDetailSection[]; // 프로젝트 상세 내용 (섹션 배열)
 }
 
@@ -29,7 +30,8 @@ const PROJECTS_ARR: Project[] = [
     techIcons: ["/images/nextjs.png", "/images/ts.png", "/images/tailwind.png"],
     iconColor: "text-indigo-600 dark:text-indigo-400",
     backgroundColor: "bg-indigo-500/10 dark:bg-indigo-400/15",
-    period: "2024.07 ~ 2026.01", // 개발 기간
+    period: "2025.08 ~ 2026.01", // 개발 기간
+    url: "https://github.com/sangboking/nextjs-blog",
     details: [
       {
         title: "1. 프로젝트 개요",

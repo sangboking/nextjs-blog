@@ -203,7 +203,89 @@ export const getTags = unstable_cache(
   }
 );
 
-// ...생략...
+// 특정 slug를 기준으로 "이전 글(더 과거)" / "다음 글(더 최신)"을 찾아오는 함수
+// - Notion DB에서 Published 글을 Date 기준 내림차순(최신순)으로 가져온 뒤
+//   현재 slug의 인덱스를 기준으로 앞/뒤 글을 계산합니다.
+// - 글이 많을 수 있으므로 pagination으로 끝까지 순회하며 필요한 만큼만 확보합니다.
+export const getAdjacentPosts = unstable_cache(
+  async (
+    slug: string
+  ): Promise<{
+    previousPost: Post | null; // 이전 글(더 과거)
+    nextPost: Post | null; // 다음 글(더 최신)
+  }> => {
+    const pageSize = 100;
+
+    let startCursor: string | undefined = undefined;
+    let hasMore = true;
+
+    const allPosts: Post[] = [];
+    let currentIndex = -1;
+
+    // 최신순 정렬 기준으로 현재 글 주변(이전/다음) 글을 계산하는 헬퍼
+    // - nextPost(다음 글=더 최신) = index - 1
+    // - previousPost(이전 글=더 과거) = index + 1
+    const getAdjacentFromIndex = (posts: Post[], index: number) => {
+      const nextPost = index - 1 >= 0 ? posts[index - 1] : null;
+      const previousPost = index + 1 < posts.length ? posts[index + 1] : null;
+      return { previousPost, nextPost };
+    };
+
+    while (hasMore) {
+      const response = await notion.databases.query({
+        database_id: process.env.NOTION_DATABASE_ID!,
+        filter: {
+          and: [
+            {
+              property: "Status",
+              select: {
+                equals: "Published",
+              },
+            },
+          ],
+        },
+        sorts: [
+          {
+            property: "Date",
+            direction: "descending", // 최신순
+          },
+        ],
+        page_size: pageSize,
+        start_cursor: startCursor,
+      });
+
+      const pagePosts = response.results
+        .filter((page): page is PageObjectResponse => "properties" in page)
+        .map(getPostMetadata);
+
+      allPosts.push(...pagePosts);
+
+      // 아직 현재 글의 위치를 못 찾았으면, 누적된 목록에서 현재 slug의 인덱스를 찾습니다.
+      if (currentIndex === -1) currentIndex = allPosts.findIndex((post) => post.slug === slug);
+
+      // 현재 글을 찾은 경우: 주변 글(이전/다음)을 계산합니다.
+      if (currentIndex !== -1) {
+        const adjacentPosts = getAdjacentFromIndex(allPosts, currentIndex);
+
+        // 다음 글(더 최신)은 앞쪽 페이지에 있으므로 currentIndex를 찾은 시점에 이미 확보되어 있습니다.
+        // 이전 글(더 과거)은 뒤쪽 페이지에 있을 수 있으므로, 없고(hasMore=true)면 한 번 더 조회합니다.
+        const isPreviousPostReady = adjacentPosts.previousPost !== null || !response.has_more;
+        if (isPreviousPostReady) return adjacentPosts;
+      }
+
+      hasMore = response.has_more;
+      startCursor = response.next_cursor ?? undefined;
+    }
+
+    // slug가 목록에 없는 경우(예: Published가 아니거나 잘못된 slug)
+    return { previousPost: null, nextPost: null };
+  },
+  ["adjacent-posts"],
+  {
+    tags: ["posts"],
+    revalidate: 60,
+  }
+);
 
 export interface CreatePostParams {
   title: string;
