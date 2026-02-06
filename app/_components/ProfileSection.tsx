@@ -1,8 +1,10 @@
+import Image from "next/image";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
 import SOCIAL_LINKS_ARR from "@/constants/socialLinks";
-import Image from "next/image";
+
 
 const ProfileSection = () => {
   return (
