@@ -9,12 +9,12 @@ import { TagFilterItem } from "@/types/blog";
 import { cn } from "@/lib/utils";
 
 interface TagSectionProps {
-  tags: Promise<TagFilterItem[]>;
+  tagsPromise: Promise<TagFilterItem[]>;
   selectedTag: string;
 }
 
-const TagSection = ({ tags, selectedTag }: TagSectionProps) => {
-  const allTags = use(tags);
+const TagSection = ({ tagsPromise, selectedTag }: TagSectionProps) => {
+  const allTags = use(tagsPromise);
 
   return (
     <Card className="py-8">

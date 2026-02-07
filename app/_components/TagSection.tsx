@@ -2,15 +2,16 @@ import Link from "next/link";
 
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
-import { TagFilterItem } from "@/types/blog";
 import { cn } from "@/lib/utils";
+import { getTags } from "@/lib/notion";
 
 interface TagSectionProps {
-  tags: TagFilterItem[];
   selectedTag: string;
 }
 
-const TagSection = async ({ tags, selectedTag }: TagSectionProps) => {
+const TagSection = async ({ selectedTag }: TagSectionProps) => {
+  const tags = await getTags();
+
   return (
     <Card className="py-8">
       <CardHeader>

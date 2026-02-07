@@ -2,12 +2,12 @@ import { Suspense } from "react";
 
 import ProfileSection from "@/app/_components/ProfileSection";
 import HeaderSection from "@/app/_components/HeaderSection";
-import TagSectionClient from "@/app/_components/TagSection.client";
+import TagSection from "@/app/_components/TagSection";
 import TagSectionSkeleton from "@/app/_components/TagSectionSkeleton";
 import PostListSuspense from "@/components/features/blog/PostListSuspense";
 import PostListSkeleton from "@/components/features/blog/PostListSkeleton";
 
-import { getPublishedPosts, getTags } from "@/lib/notion";
+import { getPublishedPosts } from "@/lib/notion";
 
 interface HomeProps {
   searchParams: Promise<{ tag?: string; sort?: string }>;
@@ -18,8 +18,9 @@ export default async function Home({ searchParams }: HomeProps) {
   const selectedTag = tag || "전체";
   const selectedSort = sort || "latest";
 
-  const tags = getTags();
   const postsPromise = getPublishedPosts({ tag: selectedTag, sort: selectedSort });
+
+
 
   return (
     <div className="container py-8">
@@ -27,7 +28,7 @@ export default async function Home({ searchParams }: HomeProps) {
         {/* 좌측 사이드바 */}
         <aside className="order-2 md:order-none">
           <Suspense fallback={<TagSectionSkeleton />}>
-            <TagSectionClient tags={tags} selectedTag={selectedTag} />
+            <TagSection selectedTag={selectedTag} />
           </Suspense>
         </aside>
 
